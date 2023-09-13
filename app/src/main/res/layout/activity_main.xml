@@ -5,31 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/yellowRobot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/king_of_detroit_robot_yellow_large" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/yellowRobot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/king_of_detroit_robot_yellow_large" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/redRobot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/king_of_detroit_robot_red_large" />
+
+            <ImageView
+                android:id="@+id/whiteRobot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/king_of_detroit_robot_white_large" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/redRobot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/king_of_detroit_robot_red_large" />
+        <ImageButton
+            android:id="@+id/rotateClock"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginEnd="10dp"
+            app:srcCompat="@drawable/rot_clockwise"
+            android:background="@drawable/roundcorner"/>
 
-        <ImageView
-            android:id="@+id/whiteRobot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/king_of_detroit_robot_white_large" />
+        <ImageButton
+            android:id="@+id/rotateCounter"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="10dp"
+            app:srcCompat="@drawable/rot_counter"
+            android:background="@drawable/roundcorner"/>
+
     </LinearLayout>
+
+
 </LinearLayout>
