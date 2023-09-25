@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">robots</string>
+    <string name="red_turn">Red Robot\'s Turn</string>
+    <string name="white_turn">White Robot\'s Turn</string>
+    <string name="yellow_turn">Yellow Robot\'s Turn</string>
+    <string name="start_message">Begin the Game</string>
+    <string name="new_activity">Go to New Activity</string>
+    <string name="toast_message">You are about to open a new activity!</string>
 </resources>
