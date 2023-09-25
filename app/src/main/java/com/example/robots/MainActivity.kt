@@ -1,14 +1,13 @@
 package com.example.robots
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.example.robots.databinding.ActivityMainBinding
 
 private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
@@ -29,7 +28,6 @@ class MainActivity : AppCompatActivity() {
             R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small)
     )
 
-    private lateinit var binding : ActivityMainBinding
     private val robotViewModel : RobotViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         newActivityButton.setOnClickListener{
             Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT).show()
-            // val intent : Intent(this, RobotPurchase :: class.java)
-            // StartActivity(intent)
+            val intent = Intent(this, RobotPurchase :: class.java)
+            startActivity(intent)
         }
     }
     private fun toggleImage() {

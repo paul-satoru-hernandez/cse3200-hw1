@@ -6,4 +6,12 @@
     <string name="start_message">Begin the Game</string>
     <string name="new_activity">Go to New Activity</string>
     <string name="toast_message">You are about to open a new activity!</string>
+    <string name="button1_name">Reward A</string>
+    <string name="button2_name">Reward B</string>
+    <string name="button3_name">Reward C</string>
+    <string name="reward_1">1</string>
+    <string name="reward_2">2</string>
+    <string name="reward_3">3</string>
+    <string name="purchased">Purchased</string>
+    <string name="insufficient">Insufficient Resources</string>
 </resources>

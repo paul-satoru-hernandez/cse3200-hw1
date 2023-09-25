@@ -10,10 +10,10 @@ class RobotViewModel : ViewModel() {
         Log.d(TAG, "instance of RobotViewModel created.")
     }
 
-    private var turnCount = 0;
+    private var turnCount = 0
 
     fun advanceTurn() {
-        turnCount++;
+        turnCount++
         if (turnCount > 3) {
             turnCount = 1
         }
