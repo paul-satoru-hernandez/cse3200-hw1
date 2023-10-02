@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun toggleImage() {
+        // Test
         setRobotTurn()
         setRobotImages()
         updateMessageBox()
