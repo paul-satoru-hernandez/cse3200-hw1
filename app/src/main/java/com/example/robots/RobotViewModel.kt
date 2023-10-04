@@ -11,12 +11,17 @@ class RobotViewModel : ViewModel() {
     }
 
     private var turnCount = 0
+    private var energyVal = 0
 
     fun advanceTurn() {
         turnCount++
         if (turnCount > 3) {
             turnCount = 1
         }
+    }
+
+    fun setEnergy(energy : Int) {
+        energyVal = energy;
     }
 
     val turnCounter : Int

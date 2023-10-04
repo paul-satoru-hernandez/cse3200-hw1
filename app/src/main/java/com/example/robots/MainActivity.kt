@@ -1,15 +1,22 @@
 package com.example.robots
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 
 private const val TAG = "MainActivity"
+
+private const val EXTRA_RECENT_PURCHASE = "com.example.robots.mostRecentPurchase";
+private const val EXTRA_CURRENT_ENERGY = "com.example.robots.currentEnergy";
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var redImg : ImageView
@@ -19,13 +26,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var newActivityButton : Button
     private lateinit var robotImages : MutableList<ImageView>
 
+    private var latestPurchase = 0;
+
     private val robots = listOf(
         Robot(R.string.red_turn, false,
-            R.drawable.king_of_detroit_robot_red_large, R.drawable.king_of_detroit_robot_red_small),
+            R.drawable.king_of_detroit_robot_red_large, R.drawable.king_of_detroit_robot_red_small,
+            0, ""),
         Robot(R.string.white_turn, false,
-            R.drawable.king_of_detroit_robot_white_large, R.drawable.king_of_detroit_robot_white_small),
+            R.drawable.king_of_detroit_robot_white_large, R.drawable.king_of_detroit_robot_white_small,
+            0, ""),
         Robot(R.string.yellow_turn, false,
-            R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small)
+            R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small,
+            0, "")
     )
 
     private val robotViewModel : RobotViewModel by viewModels()
@@ -49,15 +61,31 @@ class MainActivity : AppCompatActivity() {
 
         newActivityButton.setOnClickListener{
             Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, RobotPurchase :: class.java)
-            startActivity(intent)
+            val intent = Intent(this, RobotPurchase::class.java)
+            intent.putExtra(EXTRA_CURRENT_ENERGY, robots[robotViewModel.turnCounter - 1].energyCount);
+            purchaseLauncher.launch(intent)
+        }
+    }
+
+    private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            latestPurchase = result.data?.getIntExtra(EXTRA_RECENT_PURCHASE, 0) ?: 0
+            robots[robotViewModel.turnCounter - 1].energyCount = result.data?.getIntExtra(EXTRA_CURRENT_ENERGY, 0) ?: 0
+
+            if (latestPurchase != 0) {
+                when (latestPurchase) {
+                    1 -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_a);
+                    2 -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_b);
+                    else -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_c);
+                }
+            }
         }
     }
     private fun toggleImage() {
-        // Test
         setRobotTurn()
         setRobotImages()
         updateMessageBox()
+        createPurchaseToast()
     }
 
     private fun updateMessageBox() {
@@ -73,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 robot.myTurn = false
             }
             robots[turnCount - 1].myTurn = true
+            robots[turnCount - 1].energyCount++;
         }
     }
 
@@ -85,6 +114,17 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     robotImages[indy].setImageResource(robots[indy].smallRobot)
                 }
+            }
+        }
+    }
+
+    private fun createPurchaseToast() {
+        val turnCount = robotViewModel.turnCounter
+        if (turnCount != 0) {
+            Log.d("createPurchaseToast", robots[robotViewModel.turnCounter - 1].recentPurchase);
+            var purchased = robots[turnCount - 1].recentPurchase;
+            if (purchased != "") {
+                Toast.makeText(this, "Purchased $purchased", Toast.LENGTH_SHORT).show()
             }
         }
     }
