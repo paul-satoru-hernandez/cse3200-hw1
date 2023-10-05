@@ -16,6 +16,8 @@ private const val TAG = "MainActivity"
 
 private const val EXTRA_RECENT_PURCHASE = "com.example.robots.mostRecentPurchase";
 private const val EXTRA_CURRENT_ENERGY = "com.example.robots.currentEnergy";
+private const val EXTRA_CURRENT_TURN = "com.example.robots.currentTurn";
+private const val EXTRA_BOOLEAN_LIST = "com.example.robots.reward_list"
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var yellowImg : ImageView
     private lateinit var messageBox : TextView
     private lateinit var newActivityButton : Button
+    private lateinit var reward_list : BooleanArray
     private lateinit var robotImages : MutableList<ImageView>
 
     private var latestPurchase = 0;
@@ -55,6 +58,8 @@ class MainActivity : AppCompatActivity() {
 
         toggleImage()
 
+        reward_list = BooleanArray(7) { true }
+
         redImg.setOnClickListener{ robotViewModel.advanceTurn(); toggleImage(); }
         whiteImg.setOnClickListener{ robotViewModel.advanceTurn(); toggleImage();  }
         yellowImg.setOnClickListener{ robotViewModel.advanceTurn(); toggleImage();  }
@@ -63,7 +68,11 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, R.string.toast_message, Toast.LENGTH_SHORT).show()
             val intent = Intent(this, RobotPurchase::class.java)
             intent.putExtra(EXTRA_CURRENT_ENERGY, robots[robotViewModel.turnCounter - 1].energyCount);
-            purchaseLauncher.launch(intent)
+            intent.putExtra(EXTRA_CURRENT_TURN, robotViewModel.turnCounter);
+            intent.putExtra(EXTRA_BOOLEAN_LIST, reward_list)
+            if (robotViewModel.turnCounter != 0) {
+                purchaseLauncher.launch(intent)
+            }
         }
     }
 
@@ -121,7 +130,6 @@ class MainActivity : AppCompatActivity() {
     private fun createPurchaseToast() {
         val turnCount = robotViewModel.turnCounter
         if (turnCount != 0) {
-            Log.d("createPurchaseToast", robots[robotViewModel.turnCounter - 1].recentPurchase);
             var purchased = robots[turnCount - 1].recentPurchase;
             if (purchased != "") {
                 Toast.makeText(this, "Purchased $purchased", Toast.LENGTH_SHORT).show()

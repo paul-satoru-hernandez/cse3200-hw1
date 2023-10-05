@@ -4,14 +4,15 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 
 private const val TAG = "RobotViewModel"
-
 class RobotViewModel : ViewModel() {
     init {
         Log.d(TAG, "instance of RobotViewModel created.")
     }
 
     private var turnCount = 0
-    private var energyVal = 0
+    private var redEnergyVal = 0
+    private var whiteEnergyVal = 0
+    private var yellowEnergyVal = 0
 
     fun advanceTurn() {
         turnCount++
@@ -21,8 +22,21 @@ class RobotViewModel : ViewModel() {
     }
 
     fun setEnergy(energy : Int) {
-        energyVal = energy;
+         when (turnCount) {
+             1 -> redEnergyVal = energy;
+             2 -> whiteEnergyVal = energy;
+             else -> yellowEnergyVal = energy;
+         }
     }
+
+    val redEnergy : Int
+        get() = redEnergyVal
+
+    val whiteEnergy : Int
+        get() = whiteEnergyVal
+
+    val yellowEnergy : Int
+        get() = yellowEnergyVal
 
     val turnCounter : Int
         get() = turnCount
@@ -32,3 +46,4 @@ class RobotViewModel : ViewModel() {
         Log.d(TAG, "instance of RobotViewModel about to be destroyed.")
     }
 }
+
