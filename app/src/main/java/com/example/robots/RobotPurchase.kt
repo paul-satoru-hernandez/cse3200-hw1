@@ -13,14 +13,14 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.robots.databinding.ActivityRobotPurchaseBinding
 
-private const val EXTRA_RECENT_PURCHASE = "com.example.robots.mostRecentPurchase";
-private const val EXTRA_CURRENT_ENERGY = "com.example.robots.currentEnergy";
-private const val EXTRA_CURRENT_TURN = "com.example.robots.currentTurn";
+private const val EXTRA_RECENT_PURCHASE = "com.example.robots.mostRecentPurchase"
+private const val EXTRA_CURRENT_ENERGY = "com.example.robots.currentEnergy"
+private const val EXTRA_CURRENT_TURN = "com.example.robots.currentTurn"
 
 private const val EXTRA_BOOLEAN_LIST = "com.example.robots.reward_list"
 
-private lateinit var binding : ActivityRobotPurchaseBinding;
-private lateinit var purchaseIntent : Intent;
+private lateinit var binding : ActivityRobotPurchaseBinding
+private lateinit var purchaseIntent : Intent
 
 private var rewards = mutableListOf(
     Reward(R.string.reward_a, 1, 1, false), // Reward A
@@ -41,7 +41,7 @@ class RobotPurchase : AppCompatActivity() {
     private lateinit var buttons : List<Button>
     private lateinit var buttonTexts : List<TextView>
 
-    private var recentPurchase = 0;
+    private var recentPurchase = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -79,22 +79,22 @@ class RobotPurchase : AppCompatActivity() {
         )
 
         when (turn_count) {
-            1 -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_red_large);
-            2 -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_white_large);
-            else -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_large);
+            1 -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_red_large)
+            2 -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_white_large)
+            else -> binding.robotImg.setImageResource(R.drawable.king_of_detroit_robot_yellow_large)
         }
 
         val availableRewards = mutableListOf<Reward>()
-        for (i in 0..6) {
+        for (i in rewards.indices) {
             if (reward_list[i]) {
-                availableRewards.add(rewards[i]);
+                availableRewards.add(rewards[i])
             }
         }
         rewards.clear()
         rewards.addAll(availableRewards)
 
         randomButtons = randomizeRewards(rewards)
-        updateButtonView(randomButtons);
+        updateButtonView(randomButtons)
 
         binding.rewardAButton.setOnClickListener{
             makePurchase(randomButtons[0])
@@ -108,11 +108,9 @@ class RobotPurchase : AppCompatActivity() {
     }
     companion object {
         fun newIntent(packageContext : Context,
-                      recentPurchase : Int,
                       robot_energy : Int,
                       reward_list : BooleanArray) : Intent {
             return Intent(packageContext, RobotPurchase::class.java).apply {
-                putExtra(EXTRA_RECENT_PURCHASE, recentPurchase)
                 putExtra(EXTRA_CURRENT_ENERGY, robot_energy)
                 putExtra(EXTRA_BOOLEAN_LIST, reward_list)
             }
@@ -128,11 +126,11 @@ class RobotPurchase : AppCompatActivity() {
 
     private fun updateButtonView(rewards: List<Reward>) {
         for (layout in buttonLayouts) {
-            layout.visibility = View.INVISIBLE;
+            layout.visibility = View.INVISIBLE
         }
 
         for (i in rewards.indices) {
-            buttonLayouts[i].visibility = View.VISIBLE;
+            buttonLayouts[i].visibility = View.VISIBLE
             buttons[i].text = getString(rewards[i].rewardName)
             buttonTexts[i].text = rewards[i].rewardCost.toString()
         }
@@ -140,18 +138,23 @@ class RobotPurchase : AppCompatActivity() {
 
     private fun makePurchase(reward : Reward){
         if (robot_energy >= reward.rewardCost){
-            recentPurchase = reward.rewardCost;
+            recentPurchase = reward.rewardCost
             Log.d("makePurchase", recentPurchase.toString())
-            var s1 = getString(reward.rewardName);
+            val s1 = getString(reward.rewardName)
             val s2 = getString(R.string.purchased)
             val s3 = "$s1 $s2"
-            robot_energy -= reward.rewardCost;
+            robot_energy -= reward.rewardCost
             binding.result.text = robot_energy.toString()
+            reward_list[reward.index - 1] = false;
+
+            rewards.remove(reward)
+            randomButtons = randomizeRewards(rewards)
+            updateButtonView(randomButtons)
             Toast.makeText(this, s3, Toast.LENGTH_SHORT).show()
 
-            purchaseIntent.putExtra(EXTRA_RECENT_PURCHASE, recentPurchase);
-            purchaseIntent.putExtra(EXTRA_CURRENT_ENERGY, robot_energy);
-            setResult(Activity.RESULT_OK, purchaseIntent);
+            purchaseIntent.putExtra(EXTRA_BOOLEAN_LIST, reward_list)
+            purchaseIntent.putExtra(EXTRA_CURRENT_ENERGY, robot_energy)
+            setResult(Activity.RESULT_OK, purchaseIntent)
         }else{
             Toast.makeText(this, R.string.insufficient, Toast.LENGTH_SHORT).show()
         }

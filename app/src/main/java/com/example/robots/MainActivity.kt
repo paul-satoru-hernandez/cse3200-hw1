@@ -78,15 +78,11 @@ class MainActivity : AppCompatActivity() {
 
     private val purchaseLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            latestPurchase = result.data?.getIntExtra(EXTRA_RECENT_PURCHASE, 0) ?: 0
             robots[robotViewModel.turnCounter - 1].energyCount = result.data?.getIntExtra(EXTRA_CURRENT_ENERGY, 0) ?: 0
+            reward_list = result.data?.getBooleanArrayExtra(EXTRA_BOOLEAN_LIST)!!
 
-            if (latestPurchase != 0) {
-                when (latestPurchase) {
-                    1 -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_a);
-                    2 -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_b);
-                    else -> robots[robotViewModel.turnCounter - 1].recentPurchase = getString(R.string.reward_c);
-                }
+            for (reward in reward_list) {
+                Log.d("Reward After", reward.toString())
             }
         }
     }
