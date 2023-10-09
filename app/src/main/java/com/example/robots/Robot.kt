@@ -6,4 +6,4 @@ data class Robot(
     val largeRobot : Int,
     val smallRobot : Int,
     var energyCount : Int,
-    var recentPurchase : String)
+    var purchases : String)

@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 
 private const val TAG = "MainActivity"
 
-private const val EXTRA_RECENT_PURCHASE = "com.example.robots.mostRecentPurchase";
 private const val EXTRA_CURRENT_ENERGY = "com.example.robots.currentEnergy";
 private const val EXTRA_CURRENT_TURN = "com.example.robots.currentTurn";
 private const val EXTRA_BOOLEAN_LIST = "com.example.robots.reward_list"
@@ -125,11 +124,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPurchaseToast() {
         val turnCount = robotViewModel.turnCounter
-        if (turnCount != 0) {
-            var purchased = robots[turnCount - 1].recentPurchase;
-            if (purchased != "") {
-                Toast.makeText(this, "Purchased $purchased", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }

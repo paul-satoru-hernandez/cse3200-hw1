@@ -54,6 +54,10 @@ class RobotPurchase : AppCompatActivity() {
 
         reward_list = intent.getBooleanArrayExtra(EXTRA_BOOLEAN_LIST)!!
 
+//        for (reward in reward_list) {
+//            Log.d("received from front", reward.toString())
+//        }
+
         turn_count = intent.getIntExtra(EXTRA_CURRENT_TURN, 0)
         purchaseIntent = Intent().apply {
             putExtra(EXTRA_CURRENT_ENERGY, robot_energy)
@@ -85,13 +89,19 @@ class RobotPurchase : AppCompatActivity() {
         }
 
         val availableRewards = mutableListOf<Reward>()
-        for (i in rewards.indices) {
+        for (i in 0 .. 6) {
             if (reward_list[i]) {
+                Log.d("from main activity", reward_list[i].toString())
                 availableRewards.add(rewards[i])
             }
         }
+
         rewards.clear()
         rewards.addAll(availableRewards)
+
+//        for (reward in rewards) {
+//            Log.d("reward list", reward.toString())
+//        }
 
         randomButtons = randomizeRewards(rewards)
         updateButtonView(randomButtons)
@@ -145,9 +155,8 @@ class RobotPurchase : AppCompatActivity() {
             val s3 = "$s1 $s2"
             robot_energy -= reward.rewardCost
             binding.result.text = robot_energy.toString()
-            reward_list[reward.index - 1] = false;
+            reward_list[reward.index - 1] = false
 
-            rewards.remove(reward)
             randomButtons = randomizeRewards(rewards)
             updateButtonView(randomButtons)
             Toast.makeText(this, s3, Toast.LENGTH_SHORT).show()
