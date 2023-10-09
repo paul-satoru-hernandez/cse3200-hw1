@@ -9,10 +9,19 @@ class RobotViewModel : ViewModel() {
         Log.d(TAG, "instance of RobotViewModel created.")
     }
 
+    private val robots = listOf(
+        Robot(R.string.red_turn, false,
+            R.drawable.king_of_detroit_robot_red_large, R.drawable.king_of_detroit_robot_red_small,
+            0, ""),
+        Robot(R.string.white_turn, false,
+            R.drawable.king_of_detroit_robot_white_large, R.drawable.king_of_detroit_robot_white_small,
+            0, ""),
+        Robot(R.string.yellow_turn, false,
+            R.drawable.king_of_detroit_robot_yellow_large, R.drawable.king_of_detroit_robot_yellow_small,
+            0, "")
+    )
+
     private var turnCount = 0
-    private var redEnergyVal = 0
-    private var whiteEnergyVal = 0
-    private var yellowEnergyVal = 0
 
     fun advanceTurn() {
         turnCount++
@@ -21,25 +30,11 @@ class RobotViewModel : ViewModel() {
         }
     }
 
-    fun setEnergy(energy : Int) {
-         when (turnCount) {
-             1 -> redEnergyVal = energy;
-             2 -> whiteEnergyVal = energy;
-             else -> yellowEnergyVal = energy;
-         }
-    }
-
-    val redEnergy : Int
-        get() = redEnergyVal
-
-    val whiteEnergy : Int
-        get() = whiteEnergyVal
-
-    val yellowEnergy : Int
-        get() = yellowEnergyVal
-
     val turnCounter : Int
         get() = turnCount
+
+    val getRobots : List<Robot>
+        get() = robots
 
     override fun onCleared() {
         super.onCleared()
